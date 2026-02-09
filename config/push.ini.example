@@ -104,3 +104,11 @@ webhook=https://discord.com/api/webhooks/your_channel_id_xxxxxx/your_webhook_tok
 #http_proxy=127.0.0.1:1080
 #添加SSL控制选项
 verify_ssl=false
+
+# kook bot
+[kook]
+#频道链接
+#example:https://www.kookapp.cn/app/channels/your_server_id/your_channel_id
+channelLink=
+#机器人token
+token=

@@ -443,6 +443,7 @@ def qmsg(send_title, push_message):
         log_error(f"Qmsg 推送失败: {e}")
 
 
+# discord
 def discord(send_title, push_message):
     try:
         import pytz
@@ -484,6 +485,7 @@ def discord(send_title, push_message):
         log_error(f"Discord 推送失败: {e}")
 
 
+# windows原生推送
 def wintoast(send_title, push_message):
     try:
         from win11toast import toast
@@ -494,6 +496,32 @@ def wintoast(send_title, push_message):
         log_error(f"Windows Toast 推送失败: {e}")
 
 
+########
+# kook bot 
+import re
+def kook(send_title, push_message):
+    try:
+        channelLink = cfg.get("kook", "channelLink")
+        #从频道链接中提取频道id
+        match = re.search(r'/([^/]+)/?$', channelLink)
+        token = str(cfg.get("kook", "token")).strip()
+        send = http.post(
+            url="https://www.kookapp.cn/api/v3/message/create",
+            headers={"Content-Type": "application/json; charset=utf-8",
+                     "Authorization": f"Bot {token}"
+                     },
+            json={
+                "target_id": match.group(1),
+                # array要转为string
+                "content": f"{send_title}\n{push_message}"
+            }
+        ).json()
+        log_info(f"kook机器人推送结果：{send.get("message")}")
+    except Exception as e:
+        log_error(f"kook机器人推送失败：{e}")
+
+
+# 推送主模块
 def push(push_message):
     if not load_config():
         log_error("加载配置失败，推送终止")
